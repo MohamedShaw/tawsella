@@ -19,7 +19,7 @@ class AboutUs extends Component {
   renderImageVersion = () => (
     <>
       <AppImage
-        source={require('../../assets/imgs/aboutUsLogo.png')}
+        source={require('../../assets/imgs/avatar.png')}
         width={40}
         height={20}
         marginTop={10}
@@ -126,7 +126,7 @@ class AboutUs extends Component {
       <AppView row centerY stretch paddingLeft={10} spaceBetween marginTop={3}>
         <AppView row stretch centerY>
           <AppImage
-            source={require('../../assets/imgs/indexG.png')}
+            source={require('../../assets/imgs/avatar.png')}
             width={10}
             height={8}
             resizeMode="contain"

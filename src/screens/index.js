@@ -21,6 +21,8 @@ import ProviderInfo from './providerInfo/ProviderInfo';
 import UpdateProfile from './updateProfile/UpdateProfile';
 import ContactUs from './contactUs/ContactUs';
 import AboutUs from './aboutUs/AboutUs';
+import Plans from './plans/Plans';
+import AddPlan from './addPlan/AddPlan';
 
 export default function() {
   const createScene = InternalComponent => () =>
@@ -56,4 +58,6 @@ export default function() {
   Navigation.registerComponent('updateProfile', createScene(UpdateProfile));
   Navigation.registerComponent('contactUs', createScene(ContactUs));
   Navigation.registerComponent('aboutUs', createScene(AboutUs));
+  Navigation.registerComponent('plans', createScene(Plans));
+  Navigation.registerComponent('addPlan', createScene(AddPlan));
 }

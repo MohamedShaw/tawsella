@@ -22,47 +22,37 @@ const barHeight = Platform.OS === 'ios' ? BAR_HEIGHT_IOS : BAR_HEIGHT_ANDROID;
 const bc = 'white';
 const tabsAr = [
   { name: 'home', type: 'custom', index: 0, label: 'الرئيسية' },
-  {
-    name: 'menu',
-    type: 'custom',
-    index: 1,
-    label: 'قائمة الطعام',
-  },
+
   {
     name: 'wallet',
     type: 'custom',
-    index: 2,
+    index: 1,
     label: 'المستحقات',
   },
   {
     name: 'statics',
     type: 'custom',
-    index: 3,
+    index: 2,
     label: 'الاحصائيات',
   },
-  { name: 'more', type: 'custom', index: 4, label: 'المزيد' },
+  { name: 'more', type: 'custom', index: 3, label: 'المزيد' },
 ];
 const tabsEn = [
   { name: 'home', type: 'custom', index: 0, label: 'Home' },
-  {
-    name: 'menu',
-    type: 'custom',
-    index: 1,
-    label: 'Food Menu',
-  },
+
   {
     name: 'wallet',
     type: 'custom',
-    index: 2,
+    index: 1,
     label: 'Wallet',
   },
   {
-    name: 'statics',
+    name: 'plans',
     type: 'custom',
-    index: 3,
-    label: 'Statistics',
+    index: 2,
+    label: 'Plans',
   },
-  { name: 'more', type: 'custom', index: 4, label: 'More' },
+  { name: 'more', type: 'custom', index: 3, label: 'More' },
 ];
 
 class CustomBottomTabs extends Component {

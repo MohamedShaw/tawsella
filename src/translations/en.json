@@ -43,6 +43,8 @@
   "more-about-app": "About App",
   "more-log-out": "Log Out",
   "more-address": "Address",
+  "duration": "duration",
+  "more-language": "Arabic Language ",
   "more-credit-cards": "Credit Cards",
   "your-name": "Your name",
   "user-name": "User name",
@@ -71,5 +73,9 @@
   "noInternet-check-connection": "Check Internet Connection",
   "enter-your-account": "Enter Your Account",
   "verify-code-was-send-on": "We Have Sent six numbers to your registred phone number please check your phone",
-  "verify": "Verify"
+  "verify": "Verify",
+  "description": "Plan Description",
+  "price": "Plan Price",
+  "free": "Plan IS Free ?",
+  "post_plan": "Create Plan"
 }

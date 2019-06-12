@@ -8,6 +8,8 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_LANG:
+      console.log('language ::=>>', action);
+
       return { ...state, lang: action.lang, rtl: action.rtl };
     default:
       return state;

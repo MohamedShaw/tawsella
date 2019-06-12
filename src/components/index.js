@@ -26,3 +26,5 @@ export { default as ProviderCard } from './ProviderCard';
 export { default as ClientCardInfo } from './ClientCardInfo';
 export { default as ImagePlaceholder } from './ImagePlaceholder';
 export { default as ParallexHeader } from './ParallexHeader';
+export { default as Plan } from './Plan';
+export { default as OrderItem } from './OrderItem';

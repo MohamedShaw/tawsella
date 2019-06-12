@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 
 export default {
-  statusBar: Platform.Version < 23 ? '#e2412b' : '#fff',
+  statusBar: Platform.Version < 23 ? '#e2412b' : '#F79421',
   foreground: '#484848',
   // primary: '#F56363',
   primary: '#F79421',

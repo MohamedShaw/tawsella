@@ -27,8 +27,8 @@ import {
   SearchHeader,
   AppHeader,
   ProviderCard,
+  Plan,
 } from '../../components';
-import Test from './test';
 import {
   windowHeight,
   windowWidth,
@@ -36,7 +36,7 @@ import {
 } from '../../common/utils/responsiveDimensions';
 import { API_ENDPOINT_FOOD_SERVICE } from '../../utils/Config';
 
-class Home extends Component {
+class Plans extends Component {
   constructor(props) {
     super(props);
     this.backPressed = 0;
@@ -55,19 +55,34 @@ class Home extends Component {
     });
   }
 
+  renderPostPlan = () => {
+    const {} = this.props;
+    return (
+      <AppView
+        backgroundColor="primary"
+        circleRadius={15}
+        style={{ position: 'absolute', right: 15, bottom: 65 }}
+        center
+        onPress={() => {
+          AppNavigation.push('addPlan');
+        }}
+      >
+        <AppIcon name="md-add" type="ion" size={8} color="white" />
+      </AppView>
+    );
+  };
+
   render() {
     if (!this.props.currentUser) return null;
     return (
       <AppView stretch flex paddingBottom={26}>
-        <AppHeader hideBack title="Home" />
-        <AppView paddingVertical={4} stretch />
+        <AppView stretch height={6} />
         <AppList
           flatlist
           flex
           stretch
-          marginTop={10}
           apiRequest={{
-            url: `${API_ENDPOINT_FOOD_SERVICE}providers`,
+            url: `${API_ENDPOINT_FOOD_SERVICE}plans`,
 
             responseResolver: response => {
               console.log('********', response.data.data);
@@ -84,7 +99,7 @@ class Home extends Component {
             },
           }}
           data={this.state.data}
-          rowRenderer={data => <ProviderCard data={data} />}
+          rowRenderer={data => <Plan data={data} />}
           noResultsComponent={
             <AppView center stretch flex>
               <AppText> LIST IS Empty</AppText>
@@ -93,6 +108,7 @@ class Home extends Component {
           refreshControl={this.props.homeList}
         />
 
+        {this.renderPostPlan()}
         <CustomBottomTabs componentId={this.props.componentId} />
       </AppView>
     );
@@ -110,4 +126,4 @@ const mapDispatchToProps = dispatch => ({});
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Home);
+)(Plans);

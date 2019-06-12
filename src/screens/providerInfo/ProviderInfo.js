@@ -34,6 +34,7 @@ import {
   AppSpinner,
   AppStarRating,
   showError,
+  showSuccess,
 } from '../../common';
 import {
   CustomBottomTabs,
@@ -42,6 +43,7 @@ import {
   AppHeader,
   ProviderCard,
   ParallexHeader,
+  OrderItem,
 } from '../../components';
 import {
   windowHeight,
@@ -62,6 +64,7 @@ class Home extends Component {
     super(props);
     this.backPressed = 0;
     Navigation.events().bindComponent(this);
+    console.log('PROPD', props);
   }
 
   state = {
@@ -76,6 +79,53 @@ class Home extends Component {
       visable: true,
     });
   }
+
+  favouriteToggle(id) {
+    if (!this.state.isFavourite) {
+      this.onAddToFavorite(id);
+    } else {
+      this.onDeleteFavourite(id);
+    }
+  }
+
+  onAddToFavorite = async id => {
+    const clientId = this.props.currentUser.user._id;
+    console.log('clientID', clientId);
+
+    try {
+      this.setState({ loadingFav: true });
+      const response = await Axios.post(
+        `${API_ENDPOINT_FOOD_SERVICE}clients/${clientId}/addTofavorite`,
+        {
+          provider: id,
+        },
+      );
+      this.setState({ isFavourite: true, loadingFav: false });
+      showSuccess(I18n.t('favourite-add'));
+    } catch (error) {
+      this.setState({ loadingFav: false });
+      showError(String(error[3]));
+      console.log('**', error);
+    }
+  };
+
+  onDeleteFavourite = async id => {
+    const clientId = this.props.currentUser.user._id;
+    try {
+      this.setState({ loadingFav: true });
+      const response = await Axios.post(
+        `${API_ENDPOINT_FOOD_SERVICE}clients/${clientId}/removefavorite`,
+        {
+          provider: id,
+        },
+      );
+      this.setState({ isFavourite: false, loadingFav: false });
+      showSuccess(I18n.t('favourite-remove'));
+    } catch (error) {
+      this.setState({ loadingFav: false });
+      showError(String(error[3]));
+    }
+  };
 
   renderName = () => (
     <AppView row stretch spaceBetween marginTop={6} paddingHorizontal={5}>
@@ -111,7 +161,7 @@ class Home extends Component {
             centerSelf
             size={this.state.isFavourite ? 8 : 10.5}
             onPress={() => {
-              this.favouriteToggle(this.state.id);
+              this.favouriteToggle(this.props.data.user._id);
             }}
           />
         )}
@@ -125,46 +175,47 @@ class Home extends Component {
     return ` ${convertNumbers(this.state.cookingDuration)} ${unit}`;
   };
 
-  renderContent = () => (
-    <AppView stretch flex>
-      <AppList
-        flatlist
-        flex
-        stretch
-        marginTop={10}
-        apiRequest={{
-          url: `${API_ENDPOINT_FOOD_SERVICE}orders?clientId=${
-            this.props.data.user.id
-          }&status=FINISHED`,
+  renderContent = () => {
+    console.log('******', this.props.data);
 
-          responseResolver: response => {
-            console.log('********************', response.data.data);
+    return (
+      <AppView stretch flex>
+        <AppList
+          flatlist
+          flex
+          stretch
+          marginTop={10}
+          apiRequest={{
+            url: `${API_ENDPOINT_FOOD_SERVICE}orders?providerId=${
+              this.props.data.user._id
+            }&status=FINISHED`,
 
-            return {
-              data: response.data.data,
-              pageCount: response.data.pageCount,
-            };
-          },
+            responseResolver: response => {
+              console.log('********************', response.data.data);
 
-          onError: error => {
-            console.log(JSON.parse(JSON.stringify(error)));
-            I18n.t('ui-error-happened');
-          },
-        }}
-        data={this.state.data}
-        rowRenderer={data => <ProviderCard data={data} />}
-        noResultsComponent={
-          <AppView center stretch flex>
-            <AppText> LIST IS Empty</AppText>
-          </AppView>
-        }
-        refreshControl={this.props.homeList}
-      />
-      <AppView paddingVertical={50} />
+              return {
+                data: response.data.data,
+                pageCount: response.data.pageCount,
+              };
+            },
 
-      <AppText>mm</AppText>
-    </AppView>
-  );
+            onError: error => {
+              console.log('mm', JSON.parse(JSON.stringify(error)));
+              I18n.t('ui-error-happened');
+            },
+          }}
+          data={this.state.data}
+          rowRenderer={data => <OrderItem data={data} />}
+          noResultsComponent={
+            <AppView center stretch flex height={60}>
+              <AppText> LIST IS Empty</AppText>
+            </AppView>
+          }
+          refreshControl={this.props.homeList}
+        />
+      </AppView>
+    );
+  };
 
   renderForm = () => (
     <View style={{ flex: 1 }}>

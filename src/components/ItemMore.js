@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import I18n from 'react-native-i18n';
 import PropTypes from 'prop-types';
 
+import { connect } from 'react-redux';
 import {
   AppView,
   AppText,
@@ -39,7 +40,7 @@ class ItemMore extends Component {
     color: '#484848',
     size: 6,
     textSize: 6,
-    nameLeft: 'ios-arrow-back',
+    nameLeft: 'ios-arrow-forward',
     typeLeft: 'ion',
     sizeLeft: 8,
     textMargin: 10,
@@ -108,7 +109,7 @@ class ItemMore extends Component {
                 type={type}
                 size={size}
                 lineHeight={size}
-                // flip
+                flip={!this.props.rtl}
               />
               <AppText
                 color={color}
@@ -136,5 +137,15 @@ class ItemMore extends Component {
     );
   }
 }
+const mapStateToProps = state => ({
+  currentUser: state.auth.currentUser,
+  isConnected: state.network.isConnected,
+  rtl: state.lang.rtl,
+});
 
-export default ItemMore;
+const mapDispatchToProps = dispatch => ({});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ItemMore);

@@ -116,7 +116,9 @@ export const startApp = () => {
       },
     });
 
-    await initLang('ar', true)(store.dispatch);
+    await initLang('en', false)(store.dispatch);
+    await setLang('en', false)(store.dispatch);
+
     initInternetConnection(store.dispatch);
 
     // AsyncStorage.setItem('@CurrentUser', '');
@@ -142,15 +144,10 @@ export const startApp = () => {
             label: 'My Orderes',
             icon: require('./assets/imgs/avatar.png'),
           },
-          {
-            screen: 'home',
-            label: 'shoppingCart',
-            icon: require('./assets/imgs/avatar.png'),
-          },
 
           {
-            screen: 'home',
-            label: 'favourite',
+            screen: 'plans',
+            label: 'Plans',
             icon: require('./assets/imgs/avatar.png'),
           },
           {

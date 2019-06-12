@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SafeAreaView, Platform } from 'react-native';
+import { SafeAreaView, Platform, Switch } from 'react-native';
 import { connect } from 'react-redux';
 import I18n from 'react-native-i18n';
 import PropTypes from 'prop-types';
@@ -20,6 +20,8 @@ import {
   NoInternet,
 } from '../../components';
 import Navigation from '../../common/Navigation';
+import { initLang, setLang } from '../../actions/lang';
+import store from '../../store';
 
 const BAR_HEIGHT_ANDROID = 56;
 const BAR_HEIGHT_IOS = 49;
@@ -28,13 +30,50 @@ const barHeight = Platform.OS === 'ios' ? BAR_HEIGHT_IOS : BAR_HEIGHT_ANDROID;
 class More extends Component {
   state = {
     isLogOutVisible: false,
+    isArabic: false,
+  };
+
+  renderSwitch = () => {
+    const { data } = this.props;
+    return (
+      <>
+        <AppView stretch paddingVertical={5} paddingHorizontal={5}>
+          <ItemMore
+            leftItem={
+              <Switch
+                trackColor={{
+                  true: '#4CD964',
+                }}
+                ios_backgroundColor="#ccc"
+                thumbColor="white"
+                value={this.state.isArabic}
+                onValueChange={v => {
+                  this.setState({
+                    isArabic: v,
+                  });
+                }}
+              />
+            }
+            rightItem={
+              <AppView row paddingHorizontal={2}>
+                <AppIcon name="language" type="entypo" size={8} />
+                <AppText size={5.5} marginHorizontal={10}>
+                  {I18n.t('more-language')}
+                </AppText>
+              </AppView>
+            }
+          />
+        </AppView>
+      </>
+    );
   };
 
   renderOption = () => (
     <AppScrollView stretch>
+      {this.renderSwitch()}
+
       <AppView
         stretch
-        marginTop={8}
         backgroundColor="white"
         borderTopColor="#ccc"
         borderTopWidth={0.5}
@@ -44,13 +83,14 @@ class More extends Component {
           type="entypo"
           size={8}
           text={I18n.t('more-address')}
-          nameLeft="ios-arrow-back"
+          nameLeft="ios-arrow-forward"
           typeLeft="ion"
           paddingVertical={7}
           borderBottomColor="#ccc"
           borderBottomWidth={0.5}
         />
       </AppView>
+
       <AppView
         stretch
         marginTop={8}
@@ -63,8 +103,6 @@ class More extends Component {
           type="ant"
           size={7}
           text={I18n.t('more-setting')}
-          nameLeft="ios-arrow-back"
-          typeLeft="ion"
           onPress={() => {
             AppNavigation.push('updateProfile');
           }}
@@ -77,8 +115,6 @@ class More extends Component {
           type="ion"
           size={7}
           text={I18n.t('more-contact-us')}
-          nameLeft="ios-arrow-back"
-          typeLeft="ion"
           onPress={() => {
             Navigation.push({
               name: 'contactUs',
@@ -93,8 +129,6 @@ class More extends Component {
           type="ion"
           size={7}
           text={I18n.t('more-about-app')}
-          nameLeft="ios-arrow-back"
-          typeLeft="ion"
           onPress={() => {
             AppNavigation.push({
               name: 'aboutUs',
@@ -117,8 +151,6 @@ class More extends Component {
           type="ant"
           size={7}
           text={I18n.t('more-log-out')}
-          nameLeft="ios-arrow-back"
-          typeLeft="ion"
           onPress={() => {
             this.setState({
               isLogOutVisible: true,
@@ -144,6 +176,12 @@ class More extends Component {
         </AppView>
       );
     }
+    if (this.state.isArabic) {
+      setLang('ar', true)(store.dispatch);
+    } else {
+      setLang('en', false)(store.dispatch);
+    }
+
     return (
       <AppView
         style={{

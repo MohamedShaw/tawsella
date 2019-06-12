@@ -12,7 +12,9 @@
   "signup-fname": "الاسم الاول",
   "signup-lname": "اسم العائله ",
   "signup-username": "اسم المستخدم ",
-
+  "more-address": "عنوانك",
+  "duration": "مده عرض المشكله",
+  "more-language": "اللغه العربيه",
   "signup-email": "البريد الالكتروني",
   "signup-password": "كلمة المرور",
   "signup-confirmPassword": "تاكيد كلمة المرور",
