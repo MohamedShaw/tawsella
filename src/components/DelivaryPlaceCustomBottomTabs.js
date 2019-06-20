@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Navigation } from 'react-native-navigation';
 import { connect } from 'react-redux';
 import { Platform, StyleSheet, Text } from 'react-native';
-import SpinKit from 'react-native-spinkit';
+// import SpinKit from 'react-native-spinkit';
 import { AppView, AppButton, AppIcon, AppText } from '../common';
 import Fonts from '../common/defaults/fonts';
 import { delivaryPlaceOnSelectTab } from '../actions/DelivaryPlaceBottomTabsActions';
@@ -88,7 +88,7 @@ class DelivaryPlaceCustomBottomTabs extends Component {
         />
         {item.index === 2 && this.props.totalEarnings > 0 && (
           <>
-            <SpinKit
+            {/* <SpinKit
               style={{
                 position: 'absolute',
                 right: 9,
@@ -98,7 +98,7 @@ class DelivaryPlaceCustomBottomTabs extends Component {
               // size={20}
               type="Pulse"
               color="red"
-            />
+            /> */}
             <AppView
               circleRadius={3}
               backgroundColor="white"

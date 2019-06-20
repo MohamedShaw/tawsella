@@ -27,7 +27,7 @@ const tabsAr = [
     name: 'wallet',
     type: 'custom',
     index: 1,
-    label: 'المستحقات',
+    label: 'المفضله',
   },
   {
     name: 'statics',
@@ -41,10 +41,10 @@ const tabsEn = [
   { name: 'home', type: 'custom', index: 0, label: 'Home' },
 
   {
-    name: 'wallet',
+    name: 'Favorite',
     type: 'custom',
     index: 1,
-    label: 'Wallet',
+    label: 'Favorite',
   },
   {
     name: 'plans',

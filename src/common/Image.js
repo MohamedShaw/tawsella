@@ -28,7 +28,7 @@ import {
   selfLayoutStyles,
 } from './Base';
 import { getColor } from '.';
-import ImageViewer from '../components/ImageViewer';
+// import ImageViewer from '../components/ImageViewer';
 
 const styles = StyleSheet.create({
   fetchingStatusContainer: {
@@ -59,7 +59,7 @@ class Image extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.imageViewer = React.createRef();
+    // this.imageViewer = React.createRef();
 
     let localImg = false;
     if (
@@ -201,14 +201,12 @@ class Image extends PureComponent {
       pr,
       pt,
       pb,
-      imageViewer,
+      // imageViewer,
       data,
       ...rest
     } = this.props;
 
-    const onPress = imageViewer
-      ? () => this.imageViewer.current.toggleModal(true)
-      : this.props.onPress;
+    const { onPress } = this.props;
     const ImageComponent = this.state.localImg
       ? children
         ? NativeImageBackground
@@ -284,9 +282,9 @@ class Image extends PureComponent {
             ) : null}
           </ImageComponent>
         </Container>
-        {imageViewer && (
+        {/* {imageViewer && (
           <ImageViewer ref={this.imageViewer} data={data || [source]} />
-        )}
+        )} */}
       </View>
     );
   }

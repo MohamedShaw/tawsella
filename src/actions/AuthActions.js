@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import I18n from 'react-native-i18n';
+import { Navigation } from 'react-native-navigation';
 import { LOGIN_SUCCESS, LOGIN_FAIL, LOGIN_RESET_ERROR, LOGOUT } from './types';
 import {
   API_ENDPOINT_GATEWAY,
@@ -11,6 +12,7 @@ import { AppNavigation } from '../common';
 import { setHomeScreen, setHomeScreenDelivery } from '../utils';
 import store from '../store';
 import { clearWallet, setCollectableMoney, resetFlag } from './Wallet';
+import { onSelectTab } from './BottomTabsActions';
 
 const urlBasedOnKind = {
   HOME_COOKER: 'home-cookers',
@@ -26,6 +28,8 @@ export const setCurrentUser = data => async (dispatch, getState) => {
     payload: data,
   });
 };
+
+const x = require('../assets/imgs/avatar.png');
 
 export const resetLoginError = () => async (dispatch, getState) => {
   dispatch({
@@ -50,8 +54,38 @@ export const signIn = (values, setSubmitting) => async (dispatch, getState) => {
     );
     console.log('%%%%%%%%%%%', response.data);
 
-    AppNavigation.setStackRoot({
-      name: 'home',
+    // setHomeScreen();
+    onSelectTab(0)(store.dispatch);
+    Navigation.mergeOptions('MAIN_STACK', {
+      bottomTabs: {
+        currentTabIndex: 0,
+      },
+    });
+
+    AppNavigation.init('MAIN_STACK', {
+      bottomTabs: [
+        {
+          screen: 'home',
+          label: 'Home',
+          icon: x,
+        },
+        {
+          screen: 'home',
+          label: 'My Orderes',
+          icon: x,
+        },
+
+        {
+          screen: 'plans',
+          label: 'Plans',
+          icon: x,
+        },
+        {
+          screen: 'more',
+          label: 'More',
+          icon: x,
+        },
+      ],
     });
   } catch (error) {
     console.log('error====', JSON.parse(JSON.stringify(error)));
@@ -99,9 +133,7 @@ export function signUp(values, setSubmitting, countryCode) {
       );
       console.log('%%%%%%%%%%%', response.data);
 
-      AppNavigation.setStackRoot({
-        name: 'home',
-      });
+      setHomeScreen();
 
       setSubmitting(false);
     } catch (error) {
@@ -136,7 +168,7 @@ export const autoLogin = () => async (dispatch, getState) => {
   return { exist: false };
 };
 export const logout = () => async (dispatch, getState) => {
-  const userId = store.getState().auth.currentUser.user.id;
+  // const userId = store.getState().auth.currentUser.user.id;
 
   await AsyncStorage.setItem('@CurrentUser', '');
   AppNavigation.setStackRoot({

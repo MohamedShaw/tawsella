@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import PhotoView from '@merryjs/photo-viewer';
 import { View, StyleSheet } from 'react-native';
 
-import ImageViewer from 'react-native-image-zoom-viewer';
+// import ImageViewer from 'react-native-image-zoom-viewer';
 import { AppModal, AppIcon, AppView, moderateScale } from '../common';
 
 export default class LightBox extends Component {

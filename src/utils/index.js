@@ -26,6 +26,8 @@ export function getPlaceName(latitude, longitude) {
 }
 
 export function setHomeScreen() {
+  console.log('**************');
+
   onSelectTab(0)(store.dispatch);
   Navigation.mergeOptions('MAIN_STACK', {
     bottomTabs: {
@@ -39,16 +41,13 @@ export function setHomeScreen() {
         label: 'Home',
       },
       {
-        screen: 'categories',
-        label: 'Food Menu',
+        screen: 'home',
+        label: 'My Orderes',
       },
+
       {
-        screen: 'wallet',
-        label: 'Wallet',
-      },
-      {
-        screen: 'statistics',
-        label: 'statistics',
+        screen: 'plans',
+        label: 'Plans',
       },
       {
         screen: 'more',
