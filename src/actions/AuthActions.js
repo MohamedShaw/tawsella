@@ -70,8 +70,8 @@ export const signIn = (values, setSubmitting) => async (dispatch, getState) => {
           icon: x,
         },
         {
-          screen: 'home',
-          label: 'My Orderes',
+          screen: 'favorite',
+          label: 'Favorite',
           icon: x,
         },
 
@@ -132,8 +132,9 @@ export function signUp(values, setSubmitting, countryCode) {
         }),
       );
       console.log('%%%%%%%%%%%', response.data);
-
-      setHomeScreen();
+      AppNavigation.setStackRoot({
+        name: 'completeData',
+      });
 
       setSubmitting(false);
     } catch (error) {
@@ -263,40 +264,40 @@ export const checkServiceDataCompleted = data => async (dispatch, getState) => {
   }
 };
 
-export const clientCheck = (data, setSubmitting) => async (
+export const clientCheck = (values, setSubmitting) => async (
   dispatch,
   getState,
 ) => {
+  const { token } = store.getState().auth.currentUser;
+  const data = new FormData();
+  data.append('location', values.location);
+  data.append('image', {
+    uri: values.image,
+    type: 'image/*',
+    name: 'image',
+  });
+
   try {
-    const response = await axios.get(
-      `${API_ENDPOINT_FOOD_SERVICE}users/${data.user.id}/status`,
+    const response = await axios.post(
+      `${API_ENDPOINT_FOOD_SERVICE}clients`,
+      data,
       {
         headers: {
-          Authorization: `Bearer ${data.accessToken}`,
+          Authorization: `bearer ${token}`,
         },
       },
     );
-
-    if (response.data.kind) {
-      await checkServiceDataCompleted({
-        ...response.data,
-        ...data,
-        // TODO
-        accepted: response.data.accepted,
-      })(dispatch, getState);
-    } else {
-      setTimeout(() => {
-        setSubmitting(false);
-      }, 500);
-      AppNavigation.setStackRoot({
-        name: 'completeData',
-        passProps: {
-          userData: data,
-        },
-      });
-    }
-  } catch (error) {
-    showError(error[1].message);
+    setHomeScreen();
     setSubmitting(false);
+  } catch (error) {
+    setSubmitting(false);
+    if (error[0].response && error[0].response.status === 401) {
+      dispatch({
+        type: LOGIN_FAIL,
+        payload: I18n.t('ui-networkConnectionError'),
+      });
+    } else {
+      dispatch({ type: LOGIN_FAIL, payload: error[1].message });
+    }
   }
 };

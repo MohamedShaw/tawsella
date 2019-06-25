@@ -15,11 +15,7 @@ import {
   AppIcon,
 } from '../../common';
 import Colors from '../../common/defaults/colors';
-import {
-  SocialButtonsSection,
-  AppErrorModal,
-  LoadingOverlay,
-} from '../../components';
+import { AppErrorModal, LoadingOverlay } from '../../components';
 import { validationSchema } from './validation';
 import { signIn, resetLoginError } from '../../actions/AuthActions';
 
@@ -45,22 +41,21 @@ class SiginIn extends Component {
   renderForm = ({ injectFormProps, handleSubmit, isSubmitting }) => (
     <AppView stretch marginTop={50} marginBottom={10} marginHorizontal={10}>
       <AppInput
-        placeholder={I18n.t('email-or-phone')}
+        label={I18n.t('email-or-phone')}
         {...injectFormProps('email')}
         email
         ref={this.email}
         nextInput={this.password}
         leftItems={<AppIcon name="person" type="material" />}
-        errorTextMarginBottom
       />
+
       <AppInput
-        placeholder={I18n.t('password')}
+        label={I18n.t('password')}
         secure
         showSecureEye
         ref={this.password}
         {...injectFormProps('password')}
         leftItems={<AppIcon name="person" type="material" />}
-        errorTextMarginBottom
       />
 
       <AppButton

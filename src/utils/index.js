@@ -6,6 +6,8 @@ import { onSelectTab } from '../actions/BottomTabsActions';
 import { delivaryPlaceOnSelectTab } from '../actions/DelivaryPlaceBottomTabsActions';
 import store from '../store';
 
+const x = require('../assets/imgs/avatar.png');
+
 export function getPlaceName(latitude, longitude) {
   return fetch(
     `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_KEY}&language=ar`,
@@ -34,24 +36,29 @@ export function setHomeScreen() {
       currentTabIndex: 0,
     },
   });
+
   AppNavigation.init('MAIN_STACK', {
     bottomTabs: [
       {
         screen: 'home',
         label: 'Home',
+        icon: x,
       },
       {
-        screen: 'home',
-        label: 'My Orderes',
+        screen: 'favorite',
+        label: 'Favorite',
+        icon: x,
       },
 
       {
         screen: 'plans',
         label: 'Plans',
+        icon: x,
       },
       {
         screen: 'more',
         label: 'More',
+        icon: x,
       },
     ],
   });

@@ -116,8 +116,8 @@ export const startApp = () => {
       },
     });
 
-    await initLang('en', false)(store.dispatch);
-    await setLang('en', false)(store.dispatch);
+    await initLang('ar', true)(store.dispatch);
+    // await setLang('ar', true)(store.dispatch);
 
     initInternetConnection(store.dispatch);
 
@@ -140,8 +140,8 @@ export const startApp = () => {
             icon: require('./assets/imgs/avatar.png'),
           },
           {
-            screen: 'home',
-            label: 'My Orderes',
+            screen: 'favorite',
+            label: 'Favorite',
             icon: require('./assets/imgs/avatar.png'),
           },
 

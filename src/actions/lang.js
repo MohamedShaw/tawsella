@@ -13,6 +13,8 @@ export const setLang = (lang, rtl) => async (dispatch, store) => {
 };
 
 export const initLang = (lang, rtl) => async (dispatch, store) => {
+  console.log('hhhhh');
+
   const l = await AsyncStorage.getItem('lang');
   if (l) {
     const d = JSON.parse(l);

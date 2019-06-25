@@ -15,14 +15,9 @@ import {
   AppFormLocation,
   AppIcon,
 } from '../../common';
-import {
-  AppHeader,
-  AvatarPicker,
-  SocialButtonsSection,
-  NoInternet,
-} from '../../components';
+import { AppHeader, AvatarPicker, NoInternet } from '../../components';
 import LoadingOverlay from '../../components/loadingOverlay/LoadingOverlay';
-import { validationSchemaSAUDIA, validationSchemaEGY } from './validation';
+import { validationSchemaEGY } from './validation';
 import { API_ENDPOINT_GATEWAY } from '../../utils/Config';
 import { showError } from '../../common/utils/localNotifications';
 import { signUp } from '../../actions/AuthActions';
@@ -189,11 +184,7 @@ class SignUp extends Component {
               email: '',
               password: '',
             }}
-            validationSchema={
-              this.state.dialCode === '+966'
-                ? validationSchemaSAUDIA
-                : validationSchemaEGY
-            }
+            validationSchema={validationSchemaEGY}
             render={this.renderForm}
             onSubmit={this.onSubmit}
           />

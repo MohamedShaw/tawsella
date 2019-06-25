@@ -16,6 +16,7 @@ import {
   showSuccess,
   showError,
   AppModal,
+  AppNavigation,
 } from '../../common';
 import {
   AppHeader,
@@ -46,56 +47,11 @@ class ContactUs extends Component {
   };
 
   onSubmit = async (values, { setSubmitting, setErrors, resetForm }) => {
-    const alias = this.state.alias;
-    if (values.messages.trim()) {
-      if (alias === 'ORDER') {
-        try {
-          const response = await axios.post(
-            `${API_ENDPOINT_FOOD_SERVICE}issues`,
-            {
-              userType: 'fsa-food-service-provider',
-              text: values.messages,
-              issueType: 'ORDER',
-              order: values.order,
-            },
-          );
-          setSubmitting(false);
-          this.setState({ isInfoModalVisible: true });
-          resetForm();
-        } catch (error) {
-          console.log('Errpr===>>>', error);
-          const myError = error[3];
-          // showError('error');
-          setSubmitting(false);
-          this.setState({
-            showModal: true,
-            errorMessage: myError.length === 0 ? error[1].message : myError[0],
-          });
-        }
-      } else
-        try {
-          const response = await axios.post(
-            `${API_ENDPOINT_FOOD_SERVICE}issues`,
-            {
-              userType: 'fsa-food-service-provider',
-              text: values.messages,
-              issueType: alias,
-            },
-          );
-          setSubmitting(false);
-          this.setState({ isInfoModalVisible: true, errorMessage: '' });
-          resetForm();
-        } catch (error) {
-          console.log('ERror', error);
-          setSubmitting(false);
-          this.setState({
-            showModal: true,
-            errorMessage: error[1].message,
-          });
-        }
-    } else {
+    setTimeout(() => {
       setSubmitting(false);
-    }
+      this.setState({ isInfoModalVisible: true });
+      resetForm();
+    }, 2000);
   };
 
   changeState = () => {
@@ -138,12 +94,6 @@ class ContactUs extends Component {
             label: I18n.t('order-complain'),
             value: 'ORDER',
           },
-          {
-            label: I18n.t('public-complain'),
-            value: 'COMPLAIN',
-          },
-          { label: I18n.t('suggestion'), value: 'SUGGESTION' },
-          { label: I18n.t('question'), value: 'QUESTION' },
         ]}
       />
       {this.state.alias === 'ORDER'
@@ -240,25 +190,6 @@ class ContactUs extends Component {
     );
   }
 
-  renderSuccessModal() {
-    return (
-      <InfoModal
-        isVisible={this.state.isInfoModalVisible}
-        message={I18n.t('success-issues')}
-        onConfirm={() => {
-          this.setState({
-            isInfoModalVisible: false,
-          });
-        }}
-        changeState={v => {
-          this.setState({
-            isInfoModalVisible: v,
-          });
-        }}
-      />
-    );
-  }
-
   render() {
     const { ...rest } = this.props;
     if (!this.props.isConnected) {
@@ -273,12 +204,11 @@ class ContactUs extends Component {
       <AppView flex stretch>
         <AppHeader title={I18n.t('contact-us-haeader')} />
         <AppScrollView flex stretch>
-          <AppView stretch centerX marginTop={0}>
+          <AppView stretch centerX marginTop={10}>
             <AppImage
               center
-              source={image}
-              width={50}
-              height={20}
+              source={{ uri: this.props.currentUser.profileImage }}
+              circleRadius={30}
               resizeMode="contain"
             />
           </AppView>
@@ -299,7 +229,6 @@ class ContactUs extends Component {
             render={this.renderForm}
             onSubmit={this.onSubmit}
           />
-          {this.renderSuccessModal()}
 
           <AppModal
             animationIn="bounceIn"
@@ -347,6 +276,21 @@ class ContactUs extends Component {
             </AppView>
           </AppModal>
         </AppScrollView>
+        <InfoModal
+          isVisible={this.state.isInfoModalVisible}
+          message={I18n.t('success-issues')}
+          onConfirm={() => {
+            AppNavigation.pop();
+            this.setState({
+              isInfoModalVisible: false,
+            });
+          }}
+          changeState={v => {
+            this.setState({
+              isInfoModalVisible: v,
+            });
+          }}
+        />
       </AppView>
     );
   }

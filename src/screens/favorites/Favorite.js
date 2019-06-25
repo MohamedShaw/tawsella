@@ -28,7 +28,6 @@ import {
   AppHeader,
   ProviderCard,
 } from '../../components';
-import Test from './test';
 import {
   windowHeight,
   windowWidth,
@@ -36,7 +35,7 @@ import {
 } from '../../common/utils/responsiveDimensions';
 import { API_ENDPOINT_FOOD_SERVICE } from '../../utils/Config';
 
-class Home extends Component {
+class Favorite extends Component {
   constructor(props) {
     super(props);
     this.backPressed = 0;
@@ -66,16 +65,14 @@ class Home extends Component {
           stretch
           marginTop={10}
           apiRequest={{
-            url: `${API_ENDPOINT_FOOD_SERVICE}providers`,
+            url: `${API_ENDPOINT_FOOD_SERVICE}clients/${
+              this.props.currentUser._id
+            }/get-all-favorites`,
 
-            responseResolver: response => {
-              console.log('********', response.data.data);
-
-              return {
-                data: response.data.data,
-                pageCount: response.data.pageCount,
-              };
-            },
+            responseResolver: response => ({
+              data: response.data.data,
+              pageCount: response.data.pageCount,
+            }),
 
             onError: error => {
               console.log(JSON.parse(JSON.stringify(error)));
@@ -83,7 +80,7 @@ class Home extends Component {
             },
           }}
           data={this.state.data}
-          rowRenderer={data => <ProviderCard data={data} />}
+          rowRenderer={data => <ProviderCard data={data.provider} />}
           noResultsComponent={
             <AppView center stretch flex>
               <AppText> LIST IS Empty</AppText>
@@ -109,4 +106,4 @@ const mapDispatchToProps = dispatch => ({});
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Home);
+)(Favorite);

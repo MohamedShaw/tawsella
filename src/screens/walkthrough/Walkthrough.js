@@ -12,6 +12,9 @@ import {
 } from '../../common';
 import styles from './styles';
 import { getStatusBarHeight } from '../../utils/iphoneHelper';
+import cars from '../../assets/imgs/cars.png';
+import empty from '../../assets/imgs/empty.png';
+import taskorganizing from '../../assets/imgs/taskorganizing.png';
 
 class Walkthrough extends Component {
   renderButtons = () => (
@@ -27,8 +30,8 @@ class Walkthrough extends Component {
       backgroundColor="white"
       color={getColors().primary}
       paddingHorizontal={5}
-      rightIcon={
-        <AppView row center marginTop={1}>
+      leftIcon={
+        <AppView row center>
           <AppIcon
             name="less-than"
             type="font-awesome5"
@@ -49,7 +52,7 @@ class Walkthrough extends Component {
   renderFirstPage = (img, text) => (
     <AppView marginHorizontal={12} flex centerX>
       <AppView width={100} marginTop={55} center>
-        {/* <AppImage source={img} resizeMode="contain" equalSize={40} center /> */}
+        <AppImage source={img} resizeMode="contain" equalSize={40} center />
       </AppView>
 
       <AppView marginTop={40} center>
@@ -81,11 +84,14 @@ class Walkthrough extends Component {
           index={2}
           style={{}}
         >
-          {this.renderFirstPage(I18n.t('walkthrough-fast-food-third'))}
+          {this.renderFirstPage(empty, I18n.t('walkthrough-fast-food-third'))}
 
-          {this.renderFirstPage(I18n.t('walkthrough-fast-food'))}
+          {this.renderFirstPage(cars, I18n.t('walkthrough-fast-food'))}
 
-          {this.renderFirstPage(I18n.t('walkthrough-fast-food-second'))}
+          {this.renderFirstPage(
+            taskorganizing,
+            I18n.t('walkthrough-fast-food-second'),
+          )}
         </Swiper>
 
         {this.renderButtons()}

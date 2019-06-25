@@ -32,6 +32,7 @@ class UpdateProfile extends Component {
     this.phoneRef = React.createRef();
     this.country = React.createRef();
     this.city = React.createRef();
+    console.log('current User', props.currentUser);
 
     this.state = {
       selectedCountryId: null,
@@ -104,7 +105,7 @@ class UpdateProfile extends Component {
         borderTopColor="grey"
       >
         <AvatarPicker
-          initialUriValue={this.props.currentUser.user.profileImage}
+          initialUriValue={this.props.currentUser.profileImage}
           onChange={uri => {
             setFieldValue('profileImg', uri);
           }}
@@ -128,10 +129,10 @@ class UpdateProfile extends Component {
 
         <AppForm
           schema={{
-            profileImg: currentUser.user.profileImage,
-            nameAr: currentUser.user.name.ar,
-            nameEn: currentUser.user.name.en,
-            email: currentUser.user.email,
+            profileImg: currentUser.profileImage,
+            nameAr: currentUser.name.ar,
+            nameEn: currentUser.name.en,
+            email: currentUser.email,
           }}
           validationSchema={validationSchema}
           render={this.renderForm}

@@ -16,6 +16,7 @@ import Animated, { Easing } from 'react-native-reanimated';
 import Axios from 'axios';
 import colors from '../../common/defaults/colors';
 import { convertNumbers } from '../../common/utils/numbers';
+import AddCategoryModal from './addCategoryModal/AddCategoryModal';
 
 import {
   AppView,
@@ -72,6 +73,8 @@ class Home extends Component {
     animate: true,
     data: [],
     swiperImgs: [this.props.data.user.profileImage],
+    isModalVisable: false,
+    isFavourite: this.props.inFavourites,
   };
 
   async componentDidAppear() {
@@ -83,13 +86,16 @@ class Home extends Component {
   favouriteToggle(id) {
     if (!this.state.isFavourite) {
       this.onAddToFavorite(id);
+      // this.onDeleteFavourite(id);
     } else {
       this.onDeleteFavourite(id);
     }
   }
 
   onAddToFavorite = async id => {
-    const clientId = this.props.currentUser.user._id;
+    console.log('*****************');
+
+    const clientId = this.props.currentUser._id;
     console.log('clientID', clientId);
 
     try {
@@ -110,10 +116,12 @@ class Home extends Component {
   };
 
   onDeleteFavourite = async id => {
-    const clientId = this.props.currentUser.user._id;
+    console.log('DELETE ^^^^^^^^^^^^^');
+
+    const clientId = this.props.currentUser._id;
     try {
       this.setState({ loadingFav: true });
-      const response = await Axios.post(
+      const response = await Axios.delete(
         `${API_ENDPOINT_FOOD_SERVICE}clients/${clientId}/removefavorite`,
         {
           provider: id,
@@ -125,6 +133,30 @@ class Home extends Component {
       this.setState({ loadingFav: false });
       showError(String(error[3]));
     }
+  };
+
+  renderPostOrder = () => {
+    const {} = this.props;
+    return (
+      <AppButton
+        onPress={() => {
+          this.setState({
+            isModalVisable: true,
+          });
+        }}
+        paddingHorizontal={0}
+        paddingVertical={3}
+        size={5}
+        leftIcon={<AppIcon name="add" type="material" color="#fff" size={6} />}
+        style={{
+          position: 'absolute',
+          bottom: 10,
+          left: this.props.rtl ? 10 : undefined,
+          right: this.props.rtl ? undefined : 10,
+        }}
+        circleRadius={15}
+      />
+    );
   };
 
   renderName = () => (
@@ -190,14 +222,10 @@ class Home extends Component {
               this.props.data.user._id
             }&status=FINISHED`,
 
-            responseResolver: response => {
-              console.log('********************', response.data.data);
-
-              return {
-                data: response.data.data,
-                pageCount: response.data.pageCount,
-              };
-            },
+            responseResolver: response => ({
+              data: response.data.data,
+              pageCount: response.data.pageCount,
+            }),
 
             onError: error => {
               console.log('mm', JSON.parse(JSON.stringify(error)));
@@ -287,6 +315,12 @@ class Home extends Component {
       <>
         {/* <ProviderCard data={data} /> */}
         {this.renderForm()}
+        {this.renderPostOrder()}
+        <AddCategoryModal
+          isVisible={this.state.isModalVisable}
+          changeState={visabile => this.setState({ isModalVisable: visabile })}
+          data={this.props.data}
+        />
       </>
     );
   }

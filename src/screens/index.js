@@ -23,6 +23,10 @@ import ContactUs from './contactUs/ContactUs';
 import AboutUs from './aboutUs/AboutUs';
 import Plans from './plans/Plans';
 import AddPlan from './addPlan/AddPlan';
+import CompleteData from './completeData/CompleteData';
+import Favorite from './favorites/Favorite';
+import TermsAndConditions from './termsAndConditions/TermsAndConditions';
+import PrivacyPolicy from './privacyPolicy/PrivacyPolicy';
 
 export default function() {
   const createScene = InternalComponent => () =>
@@ -60,4 +64,11 @@ export default function() {
   Navigation.registerComponent('aboutUs', createScene(AboutUs));
   Navigation.registerComponent('plans', createScene(Plans));
   Navigation.registerComponent('addPlan', createScene(AddPlan));
+  Navigation.registerComponent('completeData', createScene(CompleteData));
+  Navigation.registerComponent('favorite', createScene(Favorite));
+  Navigation.registerComponent(
+    'termsAndConditions',
+    createScene(TermsAndConditions),
+  );
+  Navigation.registerComponent('privacyPolicy', createScene(PrivacyPolicy));
 }

@@ -20,6 +20,10 @@ class ProviderCard extends Component {
     isFavorite: false,
   };
 
+  componentDidMount() {
+    console.log('isFavorite', this.props.data);
+  }
+
   renderPrice = price => {
     const { data } = this.props;
     return (

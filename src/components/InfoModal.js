@@ -74,7 +74,7 @@ class InfoModal extends Component {
           </AppText>
           {!noConfirmButton && (
             <AppButton
-              title={this.props.buttonLabel || I18n.t('proceed-button')}
+              title={this.props.buttonLabel || I18n.t('ok')}
               marginVertical={6}
               paddingHorizontal={15}
               touchableOpacity

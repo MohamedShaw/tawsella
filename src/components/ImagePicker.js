@@ -92,6 +92,7 @@ export default class Imagesicker extends Component {
       backgroundColor="#f7f7f7"
       center
       onPress={this.addNewImage}
+      marginHorizontal={2}
     >
       <AppIcon name="add" type="material" size={12} color="primary" />
     </AppView>

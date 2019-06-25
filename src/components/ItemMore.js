@@ -130,6 +130,7 @@ class ItemMore extends Component {
               size={sizeLeft}
               color={colorLeft}
               paddingHorizontal={6}
+              flip
             />
           )}
         </AppView>
