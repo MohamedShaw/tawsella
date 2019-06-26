@@ -10,38 +10,22 @@ export function updateProfile(values, setSubmitting) {
     data.append('nameAr', values.nameAr);
     data.append('nameEn', values.nameEn);
     data.append('email', values.email);
-    data.append('city', values.city);
-    if (values.country === 1 && values.phone.startsWith('0')) {
-      data.append('phone', values.phone.slice(1));
-    } else {
-      data.append('phone', values.phone);
-    }
-    if (values.location) {
-      if (values.location.latitude && values.location.longitude) {
-        data.append('location', values.location.longitude);
-        data.append('location', values.location.latitude);
-      } else {
-        data.append('location', values.location[0]);
-        data.append('location', values.location[1]);
-      }
-    }
 
     if (
       values.profileImg &&
-      values.profileImg !==
-        getState().auth.currentUser.user.profileImg.thumbnail
+      values.profileImg !== getState().auth.currentUser.user.profileImage
     ) {
-      data.append('profileImg', {
+      data.append('profileImage', {
         uri: values.profileImg,
         type: 'image/*',
-        name: 'profile-image',
+        name: 'profileImage',
       });
     }
 
     try {
-      const userId = getState().auth.currentUser.user.id;
+      const userId = getState().auth.currentUser.user._id;
       const response = await axios.patch(
-        `${API_ENDPOINT_GATEWAY}users/${userId}`,
+        `${API_ENDPOINT_GATEWAY}user/${userId}`,
         data,
         {
           headers: {
@@ -52,7 +36,7 @@ export function updateProfile(values, setSubmitting) {
 
       const reduxData = {
         ...getState().auth.currentUser,
-        user: response.data.user,
+        user: response.data,
       };
 
       dispatch({ type: LOGIN_SUCCESS, payload: reduxData });

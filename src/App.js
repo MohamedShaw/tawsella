@@ -17,7 +17,10 @@ import icoMoonConfig from './common/utils/selection.json';
 import { autoLogin } from './actions/AuthActions';
 import { onSelectTab } from './actions/BottomTabsActions';
 import { delivaryPlaceOnSelectTab } from './actions/DelivaryPlaceBottomTabsActions';
-
+import {
+  checkLocationPermission,
+  initBackgroundGeolocation,
+} from './actions/location';
 import colors from './common/defaults/colors';
 
 export const startApp = () => {
@@ -115,12 +118,15 @@ export const startApp = () => {
         animate: false,
       },
     });
+    await setLang('ar', true)(store.dispatch);
 
     await initLang('ar', true)(store.dispatch);
-    // await setLang('ar', true)(store.dispatch);
 
     initInternetConnection(store.dispatch);
 
+    checkLocationPermission(true, () => {
+      initBackgroundGeolocation(store.dispatch, store.getState);
+    });
     // AsyncStorage.setItem('@CurrentUser', '');
 
     const { exist } = await autoLogin()(store.dispatch, store.getState);

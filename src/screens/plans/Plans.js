@@ -35,7 +35,8 @@ import {
   screenHeight,
 } from '../../common/utils/responsiveDimensions';
 import { API_ENDPOINT_FOOD_SERVICE } from '../../utils/Config';
-// 
+import NoOrdersList from '../home/NoOrdersList';
+//
 class Plans extends Component {
   constructor(props) {
     super(props);
@@ -100,11 +101,7 @@ class Plans extends Component {
           }}
           data={this.state.data}
           rowRenderer={data => <Plan data={data} />}
-          noResultsComponent={
-            <AppView center stretch flex>
-              <AppText> LIST IS Empty</AppText>
-            </AppView>
-          }
+          noResultsComponent={<NoOrdersList />}
           refreshControl={this.props.homeList}
         />
 

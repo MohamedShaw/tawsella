@@ -138,8 +138,6 @@ class SignUp extends Component {
         center
         stretch
         paddingHorizontal={10}
-        borderTopWidth={1}
-        borderTopColor="grey"
         paddingTop={15}
         marginHorizontal={10}
       >

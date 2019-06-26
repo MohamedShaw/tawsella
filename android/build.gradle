@@ -79,10 +79,7 @@ ext {
 }
 
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.4'
-    distributionUrl = distributionUrl.replace("bin", "all")
-}
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir

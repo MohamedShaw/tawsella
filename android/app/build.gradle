@@ -161,6 +161,18 @@ dependencies {
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-navigation')
     implementation project(':react-native-i18n')
+     implementation project(':react-native-open-settings')
+    implementation project(':react-native-mauron85-background-geolocation')
+
+
+    implementation(project(':react-native-maps')){
+       exclude group: 'com.google.android.gms', module: 'play-services-base'
+       exclude group: 'com.google.android.gms', module: 'play-services-maps'
+    }
+
+    implementation "com.google.android.gms:play-services-location:15.0.1"
+    implementation 'com.google.android.gms:play-services-base:16.0.1'
+    implementation 'com.google.android.gms:play-services-maps:15.0.1'
     
 
  

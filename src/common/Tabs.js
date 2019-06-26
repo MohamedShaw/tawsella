@@ -97,7 +97,7 @@ class Tabs extends Component {
       let childs = [...props.children];
       childs = props.rtl ? childs.reverse() : childs;
       childs.forEach((c, index) => {
-        this.sceneMap[c.type.displayName + index] = () => React.cloneElement(c);
+        this.sceneMap[c.type.displayName + index] = () => c;
       });
 
       this.routes = childs.map((c, index) => ({
@@ -120,6 +120,7 @@ class Tabs extends Component {
       scrollValue,
       index: props.rtl ? props.children.length - 1 : 0,
       routes: this.routes,
+      sceneMap: this.sceneMap,
     };
 
     this.scrollRef = React.createRef();
@@ -131,6 +132,32 @@ class Tabs extends Component {
     } else {
       this.state.positionAndroid.removeAllListeners();
       this.state.offsetAndroid.removeAllListeners();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.panGesture) {
+      const c1 = this.props.children.map(item => item.props);
+      const c2 = nextProps.children.map(item => item.props);
+
+      let doRerender = false;
+      c1.forEach((item, index) => {
+        if (JSON.stringify(item) !== JSON.stringify(c2[index])) {
+          doRerender = true;
+        }
+      });
+
+      if (doRerender) {
+        this.sceneMap = {};
+        let childs = [...nextProps.children];
+        childs = this.props.rtl ? childs.reverse() : childs;
+        childs.forEach((c, index) => {
+          this.sceneMap[c.type.displayName + index] = () => c;
+        });
+        this.setState({
+          sceneMap: this.sceneMap,
+        });
+      }
     }
   }
 
@@ -335,7 +362,7 @@ class Tabs extends Component {
       <TabView
         lazy
         navigationState={this.state}
-        renderScene={SceneMap(this.sceneMap)}
+        renderScene={SceneMap(this.state.sceneMap)}
         onIndexChange={index => {
           if (this.props.onIndexChange) {
             this.props.onIndexChange(index);

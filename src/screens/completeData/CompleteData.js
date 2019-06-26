@@ -41,7 +41,7 @@ class CompleteData extends Component {
   onSubmit = async (values, { setSubmitting }) => {
     const { currentUser } = this.props;
 
-    this.props.clientCheck(values, setSubmitting);
+    this.props.clientCheck(values, setSubmitting, this.props.userData);
   };
 
   renderLocationInput = injectFormProps => (

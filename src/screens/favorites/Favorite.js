@@ -6,6 +6,8 @@ import { Navigation } from 'react-native-navigation';
 import { Platform, Keyboard } from 'react-native';
 import Animated, { Easing } from 'react-native-reanimated';
 import Axios from 'axios';
+import NoOrdersList from '../home/NoOrdersList';
+
 import {
   AppView,
   AppScrollView,
@@ -54,40 +56,44 @@ class Favorite extends Component {
     });
   }
 
+  componentDidDisappear() {
+    this.setState({
+      visable: false,
+    });
+  }
+
   render() {
     if (!this.props.currentUser) return null;
     return (
       <AppView stretch flex paddingBottom={26}>
         <AppView paddingVertical={4} stretch />
-        <AppList
-          flatlist
-          flex
-          stretch
-          marginTop={10}
-          apiRequest={{
-            url: `${API_ENDPOINT_FOOD_SERVICE}clients/${
-              this.props.currentUser._id
-            }/get-all-favorites`,
+        {this.state.visable ? (
+          <AppList
+            flatlist
+            flex
+            stretch
+            marginTop={10}
+            apiRequest={{
+              url: `${API_ENDPOINT_FOOD_SERVICE}clients/${
+                this.props.currentUser.user._id
+              }/get-all-favorites`,
 
-            responseResolver: response => ({
-              data: response.data.data,
-              pageCount: response.data.pageCount,
-            }),
+              responseResolver: response => ({
+                data: response.data.data,
+                pageCount: response.data.pageCount,
+              }),
 
-            onError: error => {
-              console.log(JSON.parse(JSON.stringify(error)));
-              I18n.t('ui-error-happened');
-            },
-          }}
-          data={this.state.data}
-          rowRenderer={data => <ProviderCard data={data.provider} />}
-          noResultsComponent={
-            <AppView center stretch flex>
-              <AppText> LIST IS Empty</AppText>
-            </AppView>
-          }
-          refreshControl={this.props.homeList}
-        />
+              onError: error => {
+                console.log(JSON.parse(JSON.stringify(error)));
+                I18n.t('ui-error-happened');
+              },
+            }}
+            data={this.state.data}
+            rowRenderer={data => <ProviderCard data={data.provider} />}
+            noResultsComponent={<NoOrdersList />}
+            refreshControl={this.props.favorite}
+          />
+        ) : null}
 
         <CustomBottomTabs componentId={this.props.componentId} />
       </AppView>
@@ -99,6 +105,7 @@ const mapStateToProps = state => ({
   isConnected: state.network.isConnected,
   rtl: state.lang.rtl,
   currentUser: state.auth.currentUser,
+  favorite: state.list.favorite,
 });
 
 const mapDispatchToProps = dispatch => ({});

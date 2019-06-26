@@ -27,6 +27,7 @@ import CompleteData from './completeData/CompleteData';
 import Favorite from './favorites/Favorite';
 import TermsAndConditions from './termsAndConditions/TermsAndConditions';
 import PrivacyPolicy from './privacyPolicy/PrivacyPolicy';
+import MapScreen from './mapScreen/MapScreen';
 
 export default function() {
   const createScene = InternalComponent => () =>
@@ -71,4 +72,5 @@ export default function() {
     createScene(TermsAndConditions),
   );
   Navigation.registerComponent('privacyPolicy', createScene(PrivacyPolicy));
+  Navigation.registerComponent('mapScreen', createScene(MapScreen));
 }

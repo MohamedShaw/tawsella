@@ -46,47 +46,12 @@ export const signIn = (values, setSubmitting) => async (dispatch, getState) => {
     dispatch({ type: LOGIN_SUCCESS, payload: response.data });
 
     console.log('response', response.data);
-    AsyncStorage.setItem(
-      '@CurrentUser',
-      JSON.stringify({
-        ...response.data,
-      }),
-    );
+
+    if (response.data) {
+      isClient(response.data, setSubmitting)(dispatch, getState);
+    }
+
     console.log('%%%%%%%%%%%', response.data);
-
-    // setHomeScreen();
-    onSelectTab(0)(store.dispatch);
-    Navigation.mergeOptions('MAIN_STACK', {
-      bottomTabs: {
-        currentTabIndex: 0,
-      },
-    });
-
-    AppNavigation.init('MAIN_STACK', {
-      bottomTabs: [
-        {
-          screen: 'home',
-          label: 'Home',
-          icon: x,
-        },
-        {
-          screen: 'favorite',
-          label: 'Favorite',
-          icon: x,
-        },
-
-        {
-          screen: 'plans',
-          label: 'Plans',
-          icon: x,
-        },
-        {
-          screen: 'more',
-          label: 'More',
-          icon: x,
-        },
-      ],
-    });
   } catch (error) {
     console.log('error====', JSON.parse(JSON.stringify(error)));
 
@@ -131,9 +96,12 @@ export function signUp(values, setSubmitting, countryCode) {
           ...response.data,
         }),
       );
-      console.log('%%%%%%%%%%%', response.data);
+      const userData = { ...response.data };
       AppNavigation.setStackRoot({
         name: 'completeData',
+        passProps: {
+          userData,
+        },
       });
 
       setSubmitting(false);
@@ -178,93 +146,45 @@ export const logout = () => async (dispatch, getState) => {
   setTimeout(() => dispatch({ type: LOGOUT }), 1500);
 };
 
-export const checkAcceptance = data => async (dispatch, getState) => {
-  const d = {
-    ...data,
-    providerUrl: urlBasedOnKind[data.kind],
-  };
+export const isClient = (data, setSubmitting) => async (dispatch, getState) => {
+  const { token } = store.getState().auth.currentUser;
 
-  dispatch({
-    type: LOGIN_SUCCESS,
-    payload: d,
-  });
-
-  AsyncStorage.setItem('@CurrentUser', JSON.stringify(d));
-
-  // TODO
-  console.log('data---------', data);
-
-  if (data.accepted) {
-    if (data.kind === 'DELIVERY_PLACE') {
-      setHomeScreenDelivery();
-    } else {
+  try {
+    const response = await axios.get(
+      `${API_ENDPOINT_FOOD_SERVICE}clients/check-client`,
+      {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      },
+    );
+    if (response.data.foundClient) {
+      AsyncStorage.setItem(
+        '@CurrentUser',
+        JSON.stringify({
+          ...data,
+        }),
+      );
       setHomeScreen();
-    }
-  } else {
-    AppNavigation.setStackRoot({
-      name: 'accountReview',
-    });
-  }
-};
-
-const internalAcceptanceCheck = async data => {
-  // TODO
-  try {
-    const response = await axios.get(
-      `${API_ENDPOINT_FOOD_SERVICE}users/${data.user.id}/status`,
-      {
-        headers: {
-          Authorization: `Bearer ${data.accessToken}`,
-        },
-      },
-    );
-    console.log('RES ------ status');
-    console.log(response.data);
-
-    return response.data.accepted;
-  } catch (error) {
-    showError(error[1].message);
-    return false;
-  }
-};
-
-export const checkServiceDataCompleted = data => async (dispatch, getState) => {
-  const providerUrl = urlBasedOnKind[data.kind];
-
-  try {
-    const response = await axios.get(
-      `${API_ENDPOINT_FOOD_SERVICE}${providerUrl}/${data.user.id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${data.accessToken}`,
-        },
-      },
-    );
-
-    if (
-      (response.data.settings.kitchenTypes &&
-        response.data.settings.kitchenTypes.length) ||
-      response.data.kind === 'DELIVERY_PLACE'
-    ) {
-      checkAcceptance({
-        ...response.data,
-        ...data,
-      })(dispatch, getState);
     } else {
       AppNavigation.setStackRoot({
-        name: 'serviceSettings',
-        passProps: {
-          userData: data,
-          providerUrl,
-        },
+        name: 'completeData',
       });
     }
+    setSubmitting(false);
   } catch (error) {
-    showError(error[1].message);
+    setSubmitting(false);
+    if (error[0].response && error[0].response.status === 401) {
+      dispatch({
+        type: LOGIN_FAIL,
+        payload: I18n.t('ui-networkConnectionError'),
+      });
+    } else {
+      dispatch({ type: LOGIN_FAIL, payload: error[1].message });
+    }
   }
 };
-
-export const clientCheck = (values, setSubmitting) => async (
+export const clientCheck = (values, setSubmitting, dataUser) => async (
   dispatch,
   getState,
 ) => {
@@ -287,6 +207,8 @@ export const clientCheck = (values, setSubmitting) => async (
         },
       },
     );
+    AsyncStorage.setItem('@CurrentUser', JSON.stringify(dataUser));
+
     setHomeScreen();
     setSubmitting(false);
   } catch (error) {

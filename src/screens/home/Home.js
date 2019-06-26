@@ -1,96 +1,66 @@
 import React, { Component } from 'react';
+import { Switch, Platform } from 'react-native';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import I18n from 'react-native-i18n';
-import { Navigation } from 'react-native-navigation';
-import { Platform, Keyboard } from 'react-native';
-import Animated, { Easing } from 'react-native-reanimated';
-import Axios from 'axios';
-import {
-  AppView,
-  AppScrollView,
-  AppText,
-  responsiveHeight,
-  responsiveWidth,
-  moderateScale,
-  AppNavigation,
-  AppButton,
-  AppModal,
-  AppInput,
-  AppImage,
-  AppIcon,
-  AppList,
-} from '../../common';
-import {
-  CustomBottomTabs,
-  NoInternet,
-  SearchHeader,
-  AppHeader,
-  ProviderCard,
-} from '../../components';
-import Test from './test';
-import {
-  windowHeight,
-  windowWidth,
-  screenHeight,
-} from '../../common/utils/responsiveDimensions';
-import { API_ENDPOINT_FOOD_SERVICE } from '../../utils/Config';
+import { AppView, AppTabs, AppSpinner } from '../../common';
+import { CustomBottomTabs, NoInternet } from '../../components';
+
+import CustomTabBar from './CustomTabBar';
+import Providers from './Providers';
+import InProgress from './InProgress';
+import CustomHeader from './CustomHeader';
+
+const BAR_HEIGHT_ANDROID = 56;
+const BAR_HEIGHT_IOS = 49;
+const barHeight = Platform.OS === 'ios' ? BAR_HEIGHT_IOS : BAR_HEIGHT_ANDROID;
 
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.backPressed = 0;
-    Navigation.events().bindComponent(this);
-  }
 
-  state = {
-    visable: false,
-    animate: true,
-    data: [],
-  };
-
-  async componentDidAppear() {
-    this.setState({
-      visable: true,
-    });
+    this.state = {
+      available: false,
+      loading: false,
+    };
   }
 
   render() {
-    if (!this.props.currentUser) return null;
+    const { currentUser } = this.props;
+    console.log('curre', currentUser);
+
+    if (!currentUser) return null;
+
+    if (!this.props.isConnected) {
+      return (
+        <AppView flex stretch backgroundColor="#ECEFEF">
+          <CustomHeader title={I18n.t('home')} />
+
+          <NoInternet />
+          <CustomBottomTabs componentId={this.props.componentId} />
+        </AppView>
+      );
+    }
     return (
-      <AppView stretch flex paddingBottom={26}>
-        <AppView paddingVertical={4} stretch />
-        <AppList
-          flatlist
-          flex
-          stretch
-          marginTop={10}
-          apiRequest={{
-            url: `${API_ENDPOINT_FOOD_SERVICE}providers`,
-
-            responseResolver: response => {
-              console.log('********', response.data.data);
-
-              return {
-                data: response.data.data,
-                pageCount: response.data.pageCount,
-              };
-            },
-
-            onError: error => {
-              console.log(JSON.parse(JSON.stringify(error)));
-              I18n.t('ui-error-happened');
-            },
-          }}
-          data={this.state.data}
-          rowRenderer={data => <ProviderCard data={data} />}
-          noResultsComponent={
-            <AppView center stretch flex>
-              <AppText> LIST IS Empty</AppText>
-            </AppView>
-          }
-          refreshControl={this.props.homeList}
-        />
+      <AppView
+        flex
+        stretch
+        style={{
+          paddingBottom: barHeight,
+        }}
+      >
+        <CustomHeader title={I18n.t('homelokk')} />
+        <AppTabs customTabBar={<CustomTabBar />}>
+          <Providers
+            tabLabel={I18n.t('order-pending')}
+            componentId={this.props.componentId}
+            index={0}
+          />
+          <InProgress
+            tabLabel={I18n.t('order-inProgress')}
+            componentId={this.props.componentId}
+            index={1}
+          />
+        </AppTabs>
 
         <CustomBottomTabs componentId={this.props.componentId} />
       </AppView>
@@ -99,9 +69,8 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => ({
-  isConnected: state.network.isConnected,
-  rtl: state.lang.rtl,
   currentUser: state.auth.currentUser,
+  isConnected: state.network.isConnected,
 });
 
 const mapDispatchToProps = dispatch => ({});

@@ -45,6 +45,8 @@ import {
   ProviderCard,
   ParallexHeader,
   OrderItem,
+  InfoModal,
+  AppErrorModal,
 } from '../../components';
 import {
   windowHeight,
@@ -54,6 +56,7 @@ import {
 import { API_ENDPOINT_FOOD_SERVICE } from '../../utils/Config';
 import ImagesSwiper from './ImagesSwiper';
 import styles from './styles';
+import NoOrdersList from '../home/NoOrdersList';
 
 const coverPlaceholder = require('../../assets/imgs/avatar.png');
 
@@ -74,7 +77,11 @@ class Home extends Component {
     data: [],
     swiperImgs: [this.props.data.user.profileImage],
     isModalVisable: false,
-    isFavourite: this.props.inFavourites,
+    isFavourite: this.props.data.inFavourites,
+    isInfoModalVisible: false,
+    infoMessage: '',
+    showInvalidUserModal: false,
+    error: '',
   };
 
   async componentDidAppear() {
@@ -95,7 +102,7 @@ class Home extends Component {
   onAddToFavorite = async id => {
     console.log('*****************');
 
-    const clientId = this.props.currentUser._id;
+    const clientId = this.props.currentUser.user._id;
     console.log('clientID', clientId);
 
     try {
@@ -106,32 +113,44 @@ class Home extends Component {
           provider: id,
         },
       );
-      this.setState({ isFavourite: true, loadingFav: false });
-      showSuccess(I18n.t('favourite-add'));
+      this.setState({
+        isFavourite: true,
+        loadingFav: false,
+        isInfoModalVisible: true,
+        infoMessage: I18n.t('favourite-add'),
+      });
     } catch (error) {
-      this.setState({ loadingFav: false });
-      showError(String(error[3]));
+      this.setState({
+        loadingFav: false,
+        showInvalidUserModal: true,
+        isInfoModalVisible: false,
+        error: error[1].message,
+      });
       console.log('**', error);
     }
   };
 
   onDeleteFavourite = async id => {
-    console.log('DELETE ^^^^^^^^^^^^^');
-
-    const clientId = this.props.currentUser._id;
+    const clientId = this.props.currentUser.user._id;
     try {
       this.setState({ loadingFav: true });
       const response = await Axios.delete(
-        `${API_ENDPOINT_FOOD_SERVICE}clients/${clientId}/removefavorite`,
-        {
-          provider: id,
-        },
+        `${API_ENDPOINT_FOOD_SERVICE}clients/${clientId}/providers/${id}/removefavorite`,
       );
-      this.setState({ isFavourite: false, loadingFav: false });
-      showSuccess(I18n.t('favourite-remove'));
+      this.setState({
+        isFavourite: false,
+        loadingFav: false,
+        isInfoModalVisible: true,
+        infoMessage: I18n.t('favourite-remove'),
+      });
     } catch (error) {
-      this.setState({ loadingFav: false });
-      showError(String(error[3]));
+      this.setState({
+        loadingFav: false,
+        showInvalidUserModal: true,
+        isInfoModalVisible: false,
+        error: error[1].message,
+      });
+      console.log('**', error);
     }
   };
 
@@ -234,11 +253,7 @@ class Home extends Component {
           }}
           data={this.state.data}
           rowRenderer={data => <OrderItem data={data} />}
-          noResultsComponent={
-            <AppView center stretch flex height={60}>
-              <AppText> LIST IS Empty</AppText>
-            </AppView>
-          }
+          noResultsComponent={<NoOrdersList />}
           refreshControl={this.props.homeList}
         />
       </AppView>
@@ -320,6 +335,37 @@ class Home extends Component {
           isVisible={this.state.isModalVisable}
           changeState={visabile => this.setState({ isModalVisable: visabile })}
           data={this.props.data}
+        />
+        <InfoModal
+          isVisible={this.state.isInfoModalVisible}
+          message={this.state.infoMessage}
+          onConfirm={() => {
+            this.setState({
+              isInfoModalVisible: false,
+            });
+          }}
+          changeState={v => {
+            this.setState({
+              isInfoModalVisible: v,
+            });
+          }}
+          marginHorizontal={10}
+          lineHeight={8}
+        />
+        <AppErrorModal
+          visible={this.state.showInvalidUserModal}
+          fromSignIn
+          changeState={v => {
+            this.setState({
+              showInvalidUserModal: v,
+            });
+          }}
+          errorMessage={[this.state.error]}
+          onConfirm={() => {
+            this.setState({
+              showInvalidUserModal: false,
+            });
+          }}
         />
       </>
     );

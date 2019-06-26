@@ -13,6 +13,7 @@ import {
   AppForm,
   AppNavigation,
   AppIcon,
+  AppImage,
 } from '../../common';
 import Colors from '../../common/defaults/colors';
 import { AppErrorModal, LoadingOverlay } from '../../components';
@@ -73,7 +74,7 @@ class SiginIn extends Component {
   renderSignUpButton = () => (
     <AppView row marginBottom={5} stretch spaceBetween>
       <AppView stretch row reverse>
-        <AppButton
+        {/* <AppButton
           onPress={() => {
             AppNavigation.push({
               name: 'forgetPassword',
@@ -83,7 +84,7 @@ class SiginIn extends Component {
           size={5}
           color="button"
           transparent
-        />
+        /> */}
       </AppView>
       <AppButton
         transparent
@@ -104,13 +105,18 @@ class SiginIn extends Component {
     const {} = this.props;
     return (
       <AppView
-        circleRadius={30}
         elevation={5}
-        backgroundColor="button"
+        circleRadius={35}
         center
         marginTop={20}
+        backgroundColor="primary"
+        padding={2}
       >
-        <AppText color="white">LOGO</AppText>
+        <AppImage
+          source={require('../../assets/imgs/tawsila.jpg')}
+          circleRadius={34}
+          resizeMode="contain"
+        />
       </AppView>
     );
   };

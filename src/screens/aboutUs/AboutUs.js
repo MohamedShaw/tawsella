@@ -79,50 +79,7 @@ class AboutUs extends Component {
   );
 
   renderCompanies = () => (
-    <AppView
-      stretch
-      paddingTop={5}
-      onPress={() => {
-        Linking.openURL('https://www.indexgroup.net/')
-          .then(res => {})
-          .catch(error => {});
-      }}
-    >
-      {/* <AppView
-          row
-          centerY
-          stretch
-          marginLeft={5}
-          paddingLeft={5}
-          borderBottomWidth={0.5}
-          borderBottomColor={colors.grey}
-          spaceBetween
-        >
-          <AppView row stretch centerY>
-            <AppImage
-              source={require('../../assets/imgs/ourservices.png')}
-              width={10}
-              height={8}
-              resizeMode="contain"
-            />
-            <AppView marginHorizontal={10} marginTop={-2}>
-              <AppText color="#000" marginBottom={2}>
-                {I18n.t('aboutUs-5dmaty')}
-              </AppText>
-              <AppText size={5} color={colors.grey}>
-                {I18n.t('aboutUs-operated-developed-company')}
-              </AppText>
-            </AppView>
-          </AppView>
-          <AppIcon
-            flip
-            name="ios-arrow-forward"
-            type="ion"
-            size={8}
-            color="grey"
-            marginHorizontal={10}
-          />
-        </AppView> */}
+    <AppView stretch paddingTop={5}>
       <AppView row centerY stretch paddingLeft={10} spaceBetween marginTop={3}>
         <AppView row stretch centerY>
           <AppImage

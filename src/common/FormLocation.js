@@ -181,7 +181,7 @@ class Picker extends Network {
           brc={brc}
           style={{ overflow: 'visible' }}
         >
-          {this.state.alias && (
+          {/* {this.state.alias && (
             <AppView
               marginHorizontal={4}
               paddingHorizontal={3}
@@ -198,7 +198,7 @@ class Picker extends Network {
                 {this.props.placeholder}
               </AppText>
             </AppView>
-          )}
+          )} */}
           {leftItems.length ? this.renderItems(leftItems) : null}
           <RectButton
             onPress={() => {

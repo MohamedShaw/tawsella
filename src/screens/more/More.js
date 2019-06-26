@@ -10,6 +10,7 @@ import {
   AppNavigation,
   AppButton,
   AppIcon,
+  AppFormLocation,
   AppScrollView,
 } from '../../common';
 import {
@@ -30,7 +31,7 @@ const barHeight = Platform.OS === 'ios' ? BAR_HEIGHT_IOS : BAR_HEIGHT_ANDROID;
 class More extends Component {
   state = {
     isLogOutVisible: false,
-    isArabic: false,
+    isArabic: this.props.rtl,
   };
 
   renderSwitch = () => {
@@ -74,20 +75,16 @@ class More extends Component {
 
       <AppView
         stretch
-        backgroundColor="white"
+        // backgroundColor="white"
         borderTopColor="#ccc"
         borderTopWidth={0.5}
       >
-        <ItemMore
-          name="address"
-          type="entypo"
-          size={8}
-          text={I18n.t('more-address')}
-          nameLeft="ios-arrow-forward"
-          typeLeft="ion"
-          paddingVertical={7}
-          borderBottomColor="#ccc"
-          borderBottomWidth={0.5}
+        <AppFormLocation
+          // {...injectFormProps('location')}
+          placeholder={I18n.t('more-address')}
+          leftItems={[<AppIcon name="address" type="entypo" size={8} />]}
+          backgroundColor="#fff"
+          bc="#E6E8EA"
         />
       </AppView>
 
@@ -176,10 +173,10 @@ class More extends Component {
         </AppView>
       );
     }
-    if (this.state.isArabic) {
-      setLang('ar', true)(store.dispatch);
-    } else {
+    if (!this.state.isArabic) {
       setLang('en', false)(store.dispatch);
+    } else {
+      setLang('ar', true)(store.dispatch);
     }
 
     return (
@@ -213,6 +210,7 @@ class More extends Component {
 const mapStateToProps = state => ({
   currentUser: state.auth.currentUser,
   isConnected: state.network.isConnected,
+  rtl: state.lang.rtl,
 });
 
 const mapDispatchToProps = dispatch => ({});

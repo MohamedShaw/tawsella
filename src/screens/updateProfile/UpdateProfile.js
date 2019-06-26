@@ -105,7 +105,7 @@ class UpdateProfile extends Component {
         borderTopColor="grey"
       >
         <AvatarPicker
-          initialUriValue={this.props.currentUser.profileImage}
+          initialUriValue={this.props.currentUser.user.profileImage}
           onChange={uri => {
             setFieldValue('profileImg', uri);
           }}
@@ -129,10 +129,10 @@ class UpdateProfile extends Component {
 
         <AppForm
           schema={{
-            profileImg: currentUser.profileImage,
-            nameAr: currentUser.name.ar,
-            nameEn: currentUser.name.en,
-            email: currentUser.email,
+            profileImg: currentUser.user.profileImage,
+            nameAr: currentUser.user.name.ar,
+            nameEn: currentUser.user.name.en,
+            email: currentUser.user.email,
           }}
           validationSchema={validationSchema}
           render={this.renderForm}
