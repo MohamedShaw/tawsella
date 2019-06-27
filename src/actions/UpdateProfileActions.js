@@ -39,6 +39,8 @@ export function updateProfile(values, setSubmitting) {
         user: response.data,
       };
 
+      console.log('reduxdata', reduxData);
+
       dispatch({ type: LOGIN_SUCCESS, payload: reduxData });
       await AsyncStorage.setItem('@CurrentUser', JSON.stringify(reduxData));
       AppNavigation.pop();

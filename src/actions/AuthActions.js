@@ -43,15 +43,13 @@ export const signIn = (values, setSubmitting) => async (dispatch, getState) => {
       password: values.password,
     });
 
-    dispatch({ type: LOGIN_SUCCESS, payload: response.data });
+    const user = { ...response.data, user: response.data.token };
 
     console.log('response', response.data);
 
     if (response.data) {
       isClient(response.data, setSubmitting)(dispatch, getState);
     }
-
-    console.log('%%%%%%%%%%%', response.data);
   } catch (error) {
     console.log('error====', JSON.parse(JSON.stringify(error)));
 
@@ -89,18 +87,14 @@ export function signUp(values, setSubmitting, countryCode) {
         },
       });
 
-      dispatch({ type: LOGIN_SUCCESS, payload: response.data });
-      AsyncStorage.setItem(
-        '@CurrentUser',
-        JSON.stringify({
-          ...response.data,
-        }),
-      );
-      const userData = { ...response.data };
+      const user = { ...response.data, user: response.data };
+
+      dispatch({ type: LOGIN_SUCCESS, payload: user });
+
       AppNavigation.setStackRoot({
         name: 'completeData',
         passProps: {
-          userData,
+          userData: response.data,
         },
       });
 
@@ -147,7 +141,9 @@ export const logout = () => async (dispatch, getState) => {
 };
 
 export const isClient = (data, setSubmitting) => async (dispatch, getState) => {
-  const { token } = store.getState().auth.currentUser;
+  console.log('isClient ====>>>', data);
+
+  const { token } = data;
 
   try {
     const response = await axios.get(
@@ -159,6 +155,8 @@ export const isClient = (data, setSubmitting) => async (dispatch, getState) => {
       },
     );
     if (response.data.foundClient) {
+      dispatch({ type: LOGIN_SUCCESS, payload: data });
+
       AsyncStorage.setItem(
         '@CurrentUser',
         JSON.stringify({
@@ -174,6 +172,8 @@ export const isClient = (data, setSubmitting) => async (dispatch, getState) => {
     setSubmitting(false);
   } catch (error) {
     setSubmitting(false);
+    console.log('error', error);
+
     if (error[0].response && error[0].response.status === 401) {
       dispatch({
         type: LOGIN_FAIL,
@@ -184,14 +184,14 @@ export const isClient = (data, setSubmitting) => async (dispatch, getState) => {
     }
   }
 };
-export const clientCheck = (values, setSubmitting, dataUser) => async (
+export const clientCheck = (values, setSubmitting, data) => async (
   dispatch,
   getState,
 ) => {
   const { token } = store.getState().auth.currentUser;
-  const data = new FormData();
-  data.append('location', values.location);
-  data.append('image', {
+  const dataUser = new FormData();
+  dataUser.append('location', values.location);
+  dataUser.append('image', {
     uri: values.image,
     type: 'image/*',
     name: 'image',
@@ -200,14 +200,16 @@ export const clientCheck = (values, setSubmitting, dataUser) => async (
   try {
     const response = await axios.post(
       `${API_ENDPOINT_FOOD_SERVICE}clients`,
-      data,
+      dataUser,
       {
         headers: {
           Authorization: `bearer ${token}`,
         },
       },
     );
-    AsyncStorage.setItem('@CurrentUser', JSON.stringify(dataUser));
+
+    const user = { ...data, user: data };
+    AsyncStorage.setItem('@CurrentUser', JSON.stringify({ user }));
 
     setHomeScreen();
     setSubmitting(false);

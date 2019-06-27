@@ -18,15 +18,39 @@ class Home extends Component {
   constructor(props) {
     super(props);
 
+    console.log('Current User =====>>>>', props.currentUser);
+
     this.state = {
-      available: false,
-      loading: false,
+      visable: true,
     };
+  }
+
+  async componentDidAppear() {
+    console.log('AHHHH***************************');
+
+    this.setState({
+      visable: true,
+    });
+  }
+
+  componentDidDisappear() {
+    this.setState({
+      visable: false,
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.rtl !== this.props.rtl) {
+      console.log('##################');
+
+      this.setState({
+        visable: true,
+      });
+    }
   }
 
   render() {
     const { currentUser } = this.props;
-    console.log('curre', currentUser);
 
     if (!currentUser) return null;
 
@@ -49,19 +73,20 @@ class Home extends Component {
         }}
       >
         <CustomHeader title={I18n.t('homelokk')} />
-        <AppTabs customTabBar={<CustomTabBar />}>
-          <Providers
-            tabLabel={I18n.t('order-pending')}
-            componentId={this.props.componentId}
-            index={0}
-          />
-          <InProgress
-            tabLabel={I18n.t('order-inProgress')}
-            componentId={this.props.componentId}
-            index={1}
-          />
-        </AppTabs>
-
+        {this.state.visable ? (
+          <AppTabs customTabBar={<CustomTabBar rtl={this.props.rtl} />}>
+            <Providers
+              tabLabel={I18n.t('order-pending')}
+              componentId={this.props.componentId}
+              index={0}
+            />
+            <InProgress
+              tabLabel={I18n.t('order-inProgress')}
+              componentId={this.props.componentId}
+              index={1}
+            />
+          </AppTabs>
+        ) : null}
         <CustomBottomTabs componentId={this.props.componentId} />
       </AppView>
     );
@@ -71,6 +96,7 @@ class Home extends Component {
 const mapStateToProps = state => ({
   currentUser: state.auth.currentUser,
   isConnected: state.network.isConnected,
+  rtl: state.lang.rtl,
 });
 
 const mapDispatchToProps = dispatch => ({});

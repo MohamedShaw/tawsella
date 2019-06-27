@@ -21,6 +21,8 @@ class CustomTabBar extends Component {
   };
 
   renderTab = (name, page, isActive, onPressHandler) => {
+    console.log('name', name);
+
     const {
       activeTextColor,
       activeTextSize,
@@ -67,7 +69,7 @@ class CustomTabBar extends Component {
 
     let { containerWidth } = this.props;
 
-    containerWidth -= moderateScale(16) + 2;
+    containerWidth -= moderateScale(16) + 5;
 
     const numberOfTabs = tabs.length;
     const tabUnderlineStyle = {

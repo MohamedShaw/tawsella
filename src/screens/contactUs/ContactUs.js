@@ -203,15 +203,17 @@ class ContactUs extends Component {
     return (
       <AppView flex stretch>
         <AppHeader title={I18n.t('contact-us-haeader')} />
-        <AppScrollView flex stretch>
-          <AppView stretch centerX marginTop={10}>
+        <AppScrollView flex stretch centerX>
+          <>
             <AppImage
-              center
-              source={{ uri: this.props.currentUser.profileImage }}
-              circleRadius={30}
+              source={require('../../assets/imgs/tawsila.jpg')}
+              circleRadius={35}
+              marginTop={10}
+              marginBottom={2}
               resizeMode="contain"
+              center
             />
-          </AppView>
+          </>
           <AppForm
             schema={
               this.state.alias == 'ORDER'

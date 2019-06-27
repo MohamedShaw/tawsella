@@ -32,12 +32,14 @@ export const startApp = () => {
       const { currentUser } = store.getState().auth;
       const { lang } = store.getState().lang;
 
+      console.log('cur************', currentUser);
+
       return {
         ...config,
         headers: {
           'Accept-Language': lang,
           Authorization: currentUser
-            ? `Bearer ${currentUser.token}`
+            ? `Bearer ${currentUser.user.token || currentUser.token}`
             : config.headers.Authorization,
           ...config.headers,
         },

@@ -19,12 +19,12 @@ class AboutUs extends Component {
   renderImageVersion = () => (
     <>
       <AppImage
-        source={require('../../assets/imgs/avatar.png')}
-        width={40}
-        height={20}
+        source={require('../../assets/imgs/tawsila.jpg')}
+        circleRadius={35}
         marginTop={10}
         marginBottom={2}
         resizeMode="contain"
+        center
       />
       <AppText color="grey" size={5}>
         {I18n.t('aboutUs-version')}
