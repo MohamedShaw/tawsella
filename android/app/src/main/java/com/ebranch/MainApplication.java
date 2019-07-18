@@ -1,4 +1,4 @@
-package com.tawsila;
+package com.ebranch;
 
 import android.app.Application;
 
@@ -39,6 +39,8 @@ import com.opensettings.OpenSettingsPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import java.util.Arrays;
 import java.util.List;
+import com.facebook.react.BuildConfig;
+
 
 public class MainApplication extends NavigationApplication {
     
